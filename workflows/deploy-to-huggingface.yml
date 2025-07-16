@@ -7,25 +7,27 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install git-lfs
+      - name: Install Git LFS
         run: |
           sudo apt-get install git-lfs
           git lfs install
 
       - name: Push to Hugging Face
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_TOKEN: ${{ secrets.HF_HEALTH }}
         run: |
-          git config --global user.email "hassananees188@gmail.com@example.com"
-          git config --global user.name "HassanAnees"
+          git config --global user.email "you@example.com"
+          git config --global user.name "Hassan Anees"
 
-          git clone https://huggingface.co/spaces/HassanAnees/Health-Insurance-Cost-Prediction
+          git clone https://huggingface.co/spaces/HassanAnees/Health-Insurance-Cost-Prediction hf-space
           cp -r * hf-space/
+          cp -r .[^.]* hf-space/ || true  # Include hidden files like .streamlit
           cd hf-space
           git add .
-          git commit -m "Auto deploy from GitHub"
-          git push https://huggingface.co/${{ secrets.HF_TOKEN }}@huggingface.co/spaces/your-hf-username/your-space-name main
+          git commit -m "🚀 Auto deploy from GitHub to Hugging Face"
+          git push https://HassanAnees:${HF_TOKEN}@huggingface.co/spaces/HassanAnees/Health-Insurance-Cost-Prediction main
