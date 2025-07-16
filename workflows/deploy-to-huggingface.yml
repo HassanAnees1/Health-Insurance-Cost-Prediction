@@ -1,0 +1,31 @@
+name: Deploy to Hugging Face Space
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install git-lfs
+        run: |
+          sudo apt-get install git-lfs
+          git lfs install
+
+      - name: Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "hassananees188@gmail.com@example.com"
+          git config --global user.name "HassanAnees"
+
+          git clone https://huggingface.co/spaces/HassanAnees/Health-Insurance-Cost-Prediction
+          cp -r * hf-space/
+          cd hf-space
+          git add .
+          git commit -m "Auto deploy from GitHub"
+          git push https://huggingface.co/${{ secrets.HF_TOKEN }}@huggingface.co/spaces/your-hf-username/your-space-name main
